@@ -58,7 +58,7 @@ $current_user_metas = get_user_meta($current_user->ID);
                                 </tbody>
                             </table>
 
-                            <a href="#" id="open_myModalChangePassword" class="btn btn-primary pull-right"><?php _e('Change Password','tainacan'); ?></a>
+                            <a id="open_myModalChangePassword" class="btn btn-primary pull-right"><?php _e('Change Password','tainacan'); ?></a>
                         </div>
                     </div>
                 </div>

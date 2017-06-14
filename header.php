@@ -24,17 +24,17 @@ $_src_ = get_template_directory_uri();
   <meta name="google-site-verification" content="29Uww0bx9McdeJom1CDiXyGUZwK5mtoSuF5tA_i59F4" />
   <link rel="icon" type="image/png" href="<?php echo $_src_ . '/libraries/images/icone.png' ?>">
   <title> <?php echo repository_page_title() ?> </title>
-  <?php if (is_front_page()) { ?>
+    <?php if (is_front_page()) { ?>
     <link rel="alternate" type="application/rdf+xml" href="<?php echo site_url(); ?>/?.rdf">
     <?php if (is_restful_active()) { ?>
       <link rel="alternate" type="application/json" href="<?php echo site_url(); ?>/wp-json/">
-      <?php } ?>
-      <?php } else if (is_page_tainacan()) { ?>
+        <?php } ?>
+        <?php } elseif (is_page_tainacan()) { ?>
         <link rel="alternate" type="application/rdf+xml" href="<?php echo get_the_permalink(); ?>?<?php echo get_page_tainacan() ?>=<?php echo trim($_GET[get_page_tainacan()]) ?>.rdf">
         <?php if (is_restful_active()) { ?>
           <link rel="alternate" type="application/json" href="<?php echo site_url() . '/wp-json/posts/' . get_post_by_name($_GET[get_page_tainacan()], OBJECT, 'socialdb_object')->ID . '/?type=socialdb_object' ?>">
-          <?php } ?>
-          <?php } else if (is_single()) { ?>
+            <?php } ?>
+            <?php } elseif (is_single()) { ?>
             <meta name="thumbnail_url" content="<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>" />
             <meta name="description" content="<?php echo get_the_content() ?>" />
             <link rel="alternate" type="application/rdf+xml" href="<?php echo get_the_permalink(); ?>?.rdf">
@@ -43,131 +43,134 @@ $_src_ = get_template_directory_uri();
 
             <?php if (is_restful_active()) { ?>
               <link rel="alternate" type="application/json" href="<?php echo site_url() . '/wp-json/posts/' . get_the_ID() . '/?type=socialdb_collection' ?>">
-              <?php } ?>
-              <?php } ?>
+                <?php } ?>
+                <?php } ?>
 
-              <?php echo set_config_return_button(is_front_page()); ?>
+                <?php echo set_config_return_button(is_front_page()); ?>
 
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <?php wp_head(); ?>
+                <?php wp_head(); ?>
             </head>
             <!-- TAINACAN: tag body adaptado para o gplus -->
             <body <?php body_class(); ?> itemscope>
-              <?php
-              if (is_front_page() || is_page($stat_page)) {
-                echo home_header_bg($socialdb_logo);
-              }
+                <?php
+                if (is_front_page() || is_page($stat_page)) {
+                    echo home_header_bg($socialdb_logo);
+                }
 
-              global $wp_query;
-              $collection_id = $wp_query->post->ID;
-              $collection_owner = $wp_query->post->post_author;
-              $user_owner = get_user_by('id', $collection_owner)->display_name;
-              $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_header', true);
-              ?>
+                global $wp_query;
+                $collection_id = $wp_query->post->ID;
+                $collection_owner = $wp_query->post->post_author;
+                $user_owner = get_user_by('id', $collection_owner)->display_name;
+                $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_header', true);
+                ?>
               <!-- TAINACAN: tag nav, utilizando classes do bootstrap nao modificadas, onde estao localizados os links que chamam paginas da administracao do repositorio -->
-              <nav <?php echo set_navbar_bg_color('black', $stat_page); ?> class="navbar navbar-default header-navbar">
+            <nav <?php echo set_navbar_bg_color('black', $stat_page); ?> class="navbar navbar-default header-navbar">
                 <?php //wp_nav_menu( array( 'theme_location' => 'header-menu' ) ); ?>
 
-                <div class="container-fluid">
+              <div class="container-fluid">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
 
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                  </button>
-
-                  <div class="navbar-header logo-container">
+                <div class="navbar-header logo-container">
                     <?php
-                      echo $viewHelper->renderRepositoryLogo($socialdb_logo, $socialdb_title);
-
-                      if("disabled" == $_header_enabled) {
+                    echo $viewHelper->renderRepositoryLogo($socialdb_logo, $socialdb_title);
+                    if ("disabled" == $_header_enabled) {
                     ?>
-                        <div class="col-md-8 left repository no-padding">
-                          <h5> <?php echo bloginfo('name'); ?> </h5>
-                        </div>
+                    <div class="col-md-8 left repository no-padding">
+                      <h5> <?php echo bloginfo('name'); ?> </h5>
+                    </div>
+                    <?php                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     } ?>
+                </div>
+                
 
-                      <?php } ?>
+                <!-- TAINACAN: container responsavel em listar os links para as acoes no repositorio -->
+                <div class="user-actions collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <div class="right-menu-container">
+                <!-- TAINACAN: mostra acoes do usuario, cadastro, login, edital perfil suas colecoes -->
+                    <ul class="nav navbar-nav navbar-right admin-configs">
+                        <?php if (is_user_logged_in()) : ?>
+                        <li class="dropdown"> <!-- dropdown -->
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <?php echo ViewHelper::render_icon('user', 'png'); ?>
+                            <?php echo $current_user->display_name; ?> 
+                            <span class="caret"></span>
+                          </a>
 
-                  </div>
+                          <ul class="dropdown-menu dropdown-show" role="menu" id="tainacan-menu">
+                            <li>
+                              <a href="#" onclick="showProfileScreen('<?php echo $_src_ ?>');"> <?php _e('Profile', 'tainacan'); ?></a>
+                            </li>
+                            <!--li>
+                              <a href="<?= get_the_permalink($col_root_id) . '?mycollections=true' ?>"><?php _e('My collections', 'tainacan'); ?></a>
+                            </li>
+                            <li>
+                              <a href="<?= get_the_permalink($col_root_id) . '?sharedcollections=true' ?>"><?php _e('Shared Collections', 'tainacan'); ?></a>
+                            </li-->
+                            <li>
+                              <a style="cursor: pointer;" onclick="showCategoriesConfiguration('<?php echo $_src_; ?>', '<?php echo is_front_page(); ?>');updateStateRepositorio('categories');" >
+                                <?php _e('My Categories', 'tainacan'); ?>
+                              </a>
+                            </li>
+                            <li>
+                              <a href="<?php echo wp_logout_url(get_permalink()); ?>"> <?php _e('Logout', 'tainacan'); ?> </a>
+                            </li>
 
-                  <!-- TAINACAN: container responsavel em listar os links para as acoes no repositorio -->
-                  <div class="user-actions collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <?php
+                        if (current_user_can('manage_options')) : ?>
+                          <li class="divider"></li>
+                        <!-- TAINACAN: mostra acoes do repositorio dentro da tag <div id="configuration"> localizado no arquivo single.php -->
+                          <li class="admin-config-menu">
+                          <li class="config dropdown-header"> <?php _e('Repository Control Panel', 'tainacan'); ?> </li>
+                        
+                        <!--<ul class="admin-config-submenu" aria-expanded="false">-->
+                          <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_general_configuration');updateStateRepositorio('configuration');" style="cursor: pointer;" ><span class="glyphicon glyphicon-wrench"></span> <?php _e('Configuration', 'tainacan'); ?></a></li>
+                          <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'list_repository', 'property');updateStateRepositorio('metadata');" style="cursor: pointer;" ><span class="glyphicon glyphicon-list-alt"></span> <?php _e('Metadata', 'tainacan'); ?></a></li>
+                          <li><a href="<?php echo get_bloginfo('url') ?>/wp-admin/users.php"> <span class="glyphicon glyphicon-user"></span> <?php _e('Users', 'tainacan'); ?> </a></li>
+                          <li class="tainacan-museum-clear" <?php do_action('menu_repository_social_api') ?>><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_configuration');updateStateRepositorio('social');" style="cursor: pointer;"><span class="glyphicon glyphicon-globe"></span>  <?php _e('Social / API Keys', 'tainacan'); ?></a></li>
+                          <li class="tainacan-museum-clear" <?php do_action('menu_repository_license') ?>><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_licenses');updateStateRepositorio('licenses');" style="cursor: pointer;"><span class="glyphicon glyphicon-duplicate"></span> <?php _e('Licenses', 'tainacan'); ?></a></li>
+                            <?php
+                            if (has_action('addLibraryMenu')) {
+                                $email_name = __("E-mails configuration", "tainacan");
+                            } else {
+                                $email_name = __('Welcome Email', 'tainacan');
+                            }
+                            ?>
+                          <li class="tainacan-museum-clear">
+                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_welcome_email'); updateStateRepositorio('email');" style="cursor: pointer;">
+                              <span  class="glyphicon glyphicon-envelope"></span>
+                                <?php echo $email_name ?>
+                            </a>
+                          </li>
+                          <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_tools'); updateStateRepositorio('tools');" style="cursor: pointer;"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
+                          <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'import_full'); updateStateRepositorio('import');" style="cursor: pointer;"><span class="glyphicon glyphicon-import"></span> <?php _e('Import', 'tainacan'); ?></a></li>
+                          <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'export_full'); updateStateRepositorio('export');" style="cursor: pointer;"><span class="glyphicon glyphicon-export"></span> <?php _e('Export', 'tainacan'); ?></a></li>
+                          <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'updates_page'); " style="cursor: pointer;"><span class="glyphicon glyphicon-refresh"></span> <?php _e('Updates', 'tainacan'); ?></a></li>
+                          <li><a class="repository-statistics" href="<?php echo get_the_permalink($stat_page); ?>"> <span class="glyphicon glyphicon-globe"></span> <?php _e('Statistics', 'tainacan'); ?> </a></li>
+                          <li class="divider" style="padding: 0"></li>
+                          <li class="repository-events">
+                            <a onclick="repoConfig('<?php echo $_src_ ?>', 'list_events_repository', 'event', '<?php echo $col_root_id ?>'); updateStateRepositorio('events');" style="cursor: pointer;">
+                              <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?>&nbsp;&nbsp;
+                              <span id="notification_events_repository"></span>
+                            </a>
+                          </li>
+                        <!--</ul>-->
 
-                    <div class="right-menu-container">
-                      <!-- TAINACAN: mostra acoes do usuario, cadastro, login, edital perfil suas colecoes -->
-                      <ul class="nav navbar-nav navbar-right admin-configs">
-                        <?php if (is_user_logged_in()): ?>
-                          <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                              <?php echo ViewHelper::render_icon('user', 'png'); ?>
-                              <?php echo $current_user->display_name; ?> <span class="caret"></span>
+                        </li> <!-- end dropdown -->
+                        <?php                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 endif; ?>
+                    </ul> <!-- end navbar right -->
+                            
+                          <li class="root-notifications hide">
+                            <a href="javascript:void(0)" class="dropdown-toggle" id="collectionEvents" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <?php echo ViewHelper::render_icon("sino", "png", _t('Collection Events')); ?>
+                              <span class="notification_events_repository"></span>
                             </a>
 
-                            <ul class="dropdown-menu dropdown-show" role="menu" id="tainacan-menu">
-                              <li>
-                                <a href="#" onclick="showProfileScreen('<?php echo $_src_ ?>');"> <?php _e('Profile', 'tainacan'); ?></a>
-                              </li>
-                              <!--li>
-                                <a href="<?= get_the_permalink($col_root_id) . '?mycollections=true' ?>"><?php _e('My collections', 'tainacan'); ?></a>
-                              </li>
-                              <li>
-                                <a href="<?= get_the_permalink($col_root_id) . '?sharedcollections=true' ?>"><?php _e('Shared Collections', 'tainacan'); ?></a>
-                              </li-->
-                              <li>
-                                <a style="cursor: pointer;" onclick="showCategoriesConfiguration('<?php echo $_src_; ?>', '<?php echo is_front_page(); ?>');updateStateRepositorio('categories');" >
-                                  <?php _e('My Categories', 'tainacan'); ?>
-                                </a>
-                              </li>
-                              <li>
-                                <a href="<?php echo wp_logout_url(get_permalink()); ?>"> <?php _e('Logout', 'tainacan'); ?> </a>
-                              </li>
-
-                              <?php if (current_user_can('manage_options')): ?>
-                                <li class="divider"></li>
-                                <!-- TAINACAN: mostra acoes do repositorio dentro da tag <div id="configuration"> localizado no arquivo single.php -->
-                                <li class="admin-config-menu">
-                                  <a class="config" href="javascript:void(0)"> <?php _e('Repository Control Panel', 'tainacan'); ?> <span class="caret"></span> </a>
-                                  <ul class="admin-config-submenu" aria-expanded="false">
-                                      <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_general_configuration');updateStateRepositorio('configuration');" style="cursor: pointer;" ><span class="glyphicon glyphicon-wrench"></span> <?php _e('Configuration', 'tainacan'); ?></a></li>
-                                      <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'list_repository', 'property');updateStateRepositorio('metadata');" style="cursor: pointer;" ><span class="glyphicon glyphicon-list-alt"></span> <?php _e('Metadata', 'tainacan'); ?></a></li>
-                                      <li><a href="<?php echo get_bloginfo('url') ?>/wp-admin/users.php"> <span class="glyphicon glyphicon-user"></span> <?php _e('Users', 'tainacan'); ?> </a></li>
-                                      <li class="tainacan-museum-clear" <?php do_action('menu_repository_social_api') ?>><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_configuration');updateStateRepositorio('social');" style="cursor: pointer;"><span class="glyphicon glyphicon-globe"></span>  <?php _e('Social / API Keys', 'tainacan'); ?></a></li>
-                                      <li class="tainacan-museum-clear" <?php do_action('menu_repository_license') ?>><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_licenses');updateStateRepositorio('licenses');" style="cursor: pointer;"><span class="glyphicon glyphicon-duplicate"></span> <?php _e('Licenses', 'tainacan'); ?></a></li>
-                                      <?php
-                                        if(has_action('addLibraryMenu'))
-                                        {
-                                            $email_name = __("E-mails configuration", "tainacan");
-                                        }else $email_name = __('Welcome Email', 'tainacan');
-                                      ?>
-                                      <li class="tainacan-museum-clear">
-                                          <a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_welcome_email'); updateStateRepositorio('email');" style="cursor: pointer;">
-                                              <span  class="glyphicon glyphicon-envelope"></span>
-                                              <?php echo $email_name ?>
-                                          </a>
-                                      </li>
-                                      <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'edit_tools'); updateStateRepositorio('tools');" style="cursor: pointer;"><span  class="glyphicon glyphicon-tasks"></span> <?php _e('Tools', 'tainacan'); ?></a></li>
-                                      <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'import_full'); updateStateRepositorio('import');" style="cursor: pointer;"><span class="glyphicon glyphicon-import"></span> <?php _e('Import', 'tainacan'); ?></a></li>
-                                      <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'export_full'); updateStateRepositorio('export');" style="cursor: pointer;"><span class="glyphicon glyphicon-export"></span> <?php _e('Export', 'tainacan'); ?></a></li>
-                                      <li><a onclick="repoConfig('<?php echo $_src_ ?>', 'updates_page'); " style="cursor: pointer;"><span class="glyphicon glyphicon-refresh"></span> <?php _e('Updates', 'tainacan'); ?></a></li>
-                                      <li><a class="repository-statistics" href="<?php echo get_the_permalink($stat_page); ?>"> <span class="glyphicon glyphicon-globe"></span> <?php _e('Statistics', 'tainacan'); ?> </a></li>
-                                      <li class="divider" style="padding: 0"></li>
-                                      <li class="repository-events">
-                                          <a onclick="repoConfig('<?php echo $_src_ ?>', 'list_events_repository', 'event', '<?php echo $col_root_id ?>');
-                                                  updateStateRepositorio('events');" style="cursor: pointer;">
-                                              <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?>&nbsp;&nbsp;
-                                              <span id="notification_events_repository"></span></a>
-                                      </li>
-
-                                    </ul>
-                                  </li>
-                                <?php endif; ?>
-                              </ul>
-                            </li>
-                            <li class="root-notifications hide">
-                              <a href="javascript:void(0)" class="dropdown-toggle" id="collectionEvents" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <?php echo ViewHelper::render_icon("sino", "png", _t('Collection Events')); ?>
-                                <span class="notification_events_repository"></span>
-                              </a>
-                              <ul class="dropdown-menu" aria-labelledby="collectionEvents"></ul>
-                            </li>
+                            <ul class="dropdown-menu" aria-labelledby="collectionEvents"></ul>
+                          </li>
                             <li class="manual">
                               <a href="<?php echo MANUAL_TAINACAN_URL ?>">
                                 <?php echo ViewHelper::render_icon("help", "png", __('Click to download the manual', 'tainacan')); ?>
@@ -178,14 +181,15 @@ $_src_ = get_template_directory_uri();
                                 <span class="dashicons dashicons-wordpress"></span>
                               </a>
                             </li>
-                          <?php else: ?>
+
+                            <?php else : ?>
                             <li>
                               <div id="login-box" class="login-dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                   &nbsp;<?php _e('Login', 'tainacan') ?>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                  <?php include_once "views/user/login_header.php"; ?>
+                                    <?php include_once "views/user/login_header.php"; ?>
                                 </div>
                               </div>
                             </li>
@@ -194,7 +198,7 @@ $_src_ = get_template_directory_uri();
                                 &nbsp;<?php _e('Register', 'tainacan') ?>
                               </button>
                             </li>
-                          <?php endif; ?>
+                            <?php endif; ?>
                         </ul>
 
                         <ul <?php echo (has_nav_menu('menu-ibram')) ? 'style="display:none"' : '' ?> class="nav navbar-nav navbar-right repository-settings">
@@ -207,16 +211,16 @@ $_src_ = get_template_directory_uri();
                         <div class="nav navbar-nav navbar-right repository-settings clk">
 
                           <!--Exibe menus  "Coleções"-->
-                          <?php
-                            if (!has_action('tainacan_show_reason_modal'))
-                            {
-                          ?>
-                            <ul id="collections-menu">
+                            <?php
+                            if (!has_action('tainacan_show_reason_modal')) {
+                            ?>
+                        <li class="dropdown">
+                          <ul id="collections-menu">
                             <li class="collections">
                               <a href="<?php echo get_permalink($col_root_id); ?>" class='collecs'>
                                 <?php echo ViewHelper::render_icon('collection', 'png'); ?>
                                 <div style="display:inline-block; margin-left: 5px;">
-                                  <?php _e('Collections', 'tainacan'); ?>
+                                    <?php _e('Collections', 'tainacan'); ?>
                                   <span class="caret" style="font-size: 14px"></span>
                                 </div>
                               </a>
@@ -226,9 +230,10 @@ $_src_ = get_template_directory_uri();
                                     <?php _e('Show collections', 'tainacan'); ?>
                                   </a>
                                 </li>
-                                <?php if (is_user_logged_in()): ?>
-                                  <li class="divider"></li>
-                                  <li> <a class="create-collection">
+                                <?php if (is_user_logged_in()) : ?>
+                                <li class="divider"></li>
+                                <li> 
+                                  <a class="create-collection">
                                     <?php _e('Create collection', 'tainacan') ?>
                                     <span class="glyphicon glyphicon-chevron-right"></span>
                                   </a>
@@ -246,29 +251,29 @@ $_src_ = get_template_directory_uri();
                                   </a>
                                 </li>
 
-                              <?php endif; ?>
-                            </ul>
-                          </li>
-                        </ul>
-                          <?php } ?>
+                                <?php endif; ?>
+                              </ul>
+                            </li>
+                          </ul>
+                        </li>
+                            <?php                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 } ?>
                       </div>
 
-                      <?php
-                      if(has_action("add_users_button"))
-                      {
-                        do_action("add_users_button");
-                      }
-                      ?>
-                      <?php if (!is_front_page() && !is_plugin_active( 'ibram-tainacan/ibram-tainacan.php' )): // !is_page($stat_page) ?>
+                        <?php
+                        if (has_action("add_users_button")) {
+                            do_action("add_users_button");
+                        }
+                        ?>
+                        <?php if (!is_front_page() && !is_plugin_active( 'ibram-tainacan/ibram-tainacan.php' )) : // !is_page($stat_page) ?>
                         <form id="formSearchCollections" class="navbar-form navbar-right search-tainacan-collection" role="search">
                           <div class="input-group search-collection search-home">
                             <input style="display: none" type="text" class="form-control" name="search_collections" id="search_collections" placeholder="<?php _e('Find', 'tainacan') ?>"/>
                             <button onclick="showTopSearch();" id="expand-top-search" class="btn btn-default" type="button">
-                              <?php echo ViewHelper::render_icon('search-white', 'png', __('Click to expand', 'tainacan')); ?>
+                                <?php echo ViewHelper::render_icon('search-white', 'png', __('Click to expand', 'tainacan')); ?>
                             </button>
                           </div>
                         </form>
-                      <?php elseif(has_action('alter_home_page')):  ?>
+                        <?php elseif (has_action('alter_home_page')) :  ?>
                        <form id="formSearchCollectionsTopSearch" class="navbar-form navbar-right search-tainacan-collection" role="search">
                             <div class="input-group search-collection search-home">
                               <input style="display: none" type="text" class="form-control" name="search_collections" id="search_collections" placeholder="<?php _e('Find', 'tainacan') ?>"/>
@@ -277,11 +282,11 @@ $_src_ = get_template_directory_uri();
                               </button>
                             </div>
                           </form>
-                      <?php endif; ?>
+                        <?php endif; ?>
                     </div>
                   </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
-              </nav>
+            </nav>
 
               <!-- TAINACAN: modal padrao bootstrap aberto via javascript pelo seu id, formulario inicial para criacao de colecao -->
               <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -290,7 +295,7 @@ $_src_ = get_template_directory_uri();
 
                     <?php $col_controller = $_src_ . "/controllers/collection/collection_controller.php"; ?>
                     <form onsubmit="$('#myModal').modal('hide'); show_modal_main();" action="<?php echo $col_controller ?>" method="POST">
-                      <?php echo $viewHelper->render_modal_header('remove-sign', __('Create Collection', 'tainacan')); ?>
+                        <?php echo $viewHelper->render_modal_header('remove-sign', __('Create Collection', 'tainacan')); ?>
                       <div id="form_new_collection">
                         <div class="modal-body" style="padding: 0 15px 0 15px;">
 
@@ -320,13 +325,13 @@ $_src_ = get_template_directory_uri();
                     <form id="importCollection">
                       <input type="hidden" name="operation" value="importCollection">
 
-                      <?php echo $viewHelper->render_modal_header('remove-sign', __('Import Collection', 'tainacan')); ?>
+                        <?php echo $viewHelper->render_modal_header('remove-sign', __('Import Collection', 'tainacan')); ?>
 
                       <div class="modal-body">
                         <!---Adição SELECT BOX-->
                         <?php
                         if (has_action('add_select_box')) {
-                          do_action("add_select_box");
+                            do_action("add_select_box");
                         }
                         ?>
                         <div class="form-group">

@@ -1987,11 +1987,11 @@ function showProfileScreen(src) {
         type: 'POST',
         data: {operation: 'show_profile_screen', collection_id: $("#collection_id").val()}
     }).done(function (result) {
-        $('#main_part').hide();
+        $('#main_part').show();
         resetHomeStyleSettings();
         $('#loader_collections').hide();
         $('#collection_post').hide();
-        $('#configuration').html(result);
+        $('#configuration').html(result).show();
     });
 
 }
@@ -2444,7 +2444,8 @@ function resetHomeStyleSettings() {
         $("#configuration").css('margin-top', '30px');
     } else {
         var $_main = '#main_part';
-        $("#configuration").css('margin-top', '0px');
+        $("#configuration").css({'margin-top':'0px', 'display':'block'});
+        
         if( $($_main).hasClass('home') ) {
             $($_main).show().css('padding-bottom', '0%');
             $('#display_view_main_page').hide();

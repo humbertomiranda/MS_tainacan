@@ -139,7 +139,6 @@ if (isset($_GET['info_messages'])) {
         </div>
     </div>
 </div>
-</body>
-
  <?php require_once (dirname(__FILE__) . '/extras/routes/routes.php'); ?>
 <?php get_footer(); ?>
+</body>
