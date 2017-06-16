@@ -15,9 +15,6 @@
     #tainacan-breadcrumbs a:hover {
       font-weight: normal; }
 
-.navbar-toggle {
-  margin-top: 3px; }
-
 .navbar-form {
   margin-top: 10px; }
 
@@ -51,14 +48,8 @@ ul.repository-settings li.wp-admin span, .admin-configs li.wp-admin span {
 ul.repository-settings .login-dropdown button, .admin-configs .login-dropdown button {
   border: 1px solid whitesmoke; }
 
-.login-dropdown:hover .dropdown-menu, .root-notifications:hover .dropdown-menu {
-  display: block;
-  margin-top: 0; }
-
 .header-navbar {
-  padding: 5px 0 5px 0;
-  height: 50px;
-  position: fixed;
+  margin-bottom: 0;
   width: 100%;
   z-index: 99;
   top: 0; }
@@ -97,16 +88,14 @@ ul.repository-settings .login-dropdown button, .admin-configs .login-dropdown bu
         border-left: none !important;
         border-radius: 0 4px 4px 0; }
 
-.user-actions.collapse {
-  height: 45px !important; }
-  .user-actions.collapse ul span.glyphicon {
-    font-size: 10px;
-    top: 0; }
-  .user-actions.collapse button {
-    padding: 5px; }
-  .user-actions.collapse .right-menu-container {
-    float: right;
-    margin-top: -7px; }
+.user-actions.collapse ul span.glyphicon {
+  font-size: 10px;
+  top: 0; }
+.user-actions.collapse button {
+  padding: 5px; }
+.user-actions.collapse .right-menu-container {
+  float: right;
+  margin-top: -7px; }
 
 li.admin-config-menu a.config {
   font-weight: bolder;
@@ -274,7 +263,10 @@ a:hover {
   padding-bottom: 50px; }
 
 #login-box .dropdown-menu {
-  width: 300px; }
+  width: auto;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  min-width: 300px; }
 #login-box hr {
   margin-bottom: 0; }
 #login-box #login-out {

@@ -75,6 +75,7 @@ $current_user_metas = get_user_meta($current_user->ID);
     </div>
 </div>
 
+<!-- Modal Edit profile -->
 <div class="modal fade" id="myModalChangePassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
