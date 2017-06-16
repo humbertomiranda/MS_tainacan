@@ -58,7 +58,7 @@ $current_user_metas = get_user_meta($current_user->ID);
                                 </tbody>
                             </table>
 
-                            <a id="open_myModalChangePassword" class="btn btn-primary pull-right"><?php _e('Change Password','tainacan'); ?></a>
+                            <a id="open-modalEdit" class="btn btn-primary pull-right"><?php _e('Edit profile','tainacan'); ?></a>
                         </div>
                     </div>
                 </div>
@@ -76,35 +76,60 @@ $current_user_metas = get_user_meta($current_user->ID);
 </div>
 
 <!-- Modal Edit profile -->
-<div class="modal fade" id="myModalChangePassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form  id="formUserChangePassword" name="formUserChangePassword" >  
+            
+             
                 <input type="hidden" name="operation" value="change_password">
                 <input type="hidden" name="password_user_id" id="password_user_id" value="<?php echo $current_user->ID; ?>"/>
+                
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><?php _e('Change Password!','tainacan'); ?></h4>
+                    <h4 class="modal-title" id="myModalLabel"><?php _e('Edit profile!','tainacan'); ?></h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="old_password"><?php _e('Old Password','tainacan'); ?><span style="color: #EE0000;"> *</span></label>
-                        <input type="password" required="required" class="form-control" name="old_password" id="old_password" placeholder="<?php _e('Type here the old password','tainacan'); ?>">
+                    <div>
+                        <h4><?php _e('Change name and email'); ?></h4>
+                        <form id="formNames">
+                            <div class="form-group">
+                                <label for="new-first-name"><?php _e('First Name'); ?></span></label>
+                                <input class="form-control" type="text" name="" id="new-first-name" value="<?php echo $current_user_metas['first_name'][0]; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="new-last-name"><?php _e('Last Name'); ?></span></label>
+                                <input class="form-control" type="text" name="" id="new-last-name" value="<?php echo $current_user_metas['last_name'][0]; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="new-email"><?php _e('Email'); ?></label>
+                                <input class="form-control" type="" name="" id="new-email" value="<?php echo $current_user->user_email; ?>">
+                            </div>
+                        </form>
+                        <button type="submit" class="btn btn-primary" onclick="check_change_names(); return false;"><?php _e('Submit','tainacan'); ?></button>
                     </div>
-                    <div class="form-group">
-                        <label for="new_password"><?php _e('New Password','tainacan'); ?><span style="color: #EE0000;"> *</span></label>
-                        <input type="password" required="required" class="form-control" name="new_password" id="new_password" placeholder="<?php _e('Type here the new password','tainacan'); ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="new_check_password"><?php _e('Confirm new password','tainacan'); ?><span style="color: #EE0000;"> *</span></label>
-                        <input type="password" required="required" class="form-control" name="new_check_password" id="new_check_password" placeholder="<?php _e('Type here your new password again','tainacan'); ?>">
+                    <div>
+                        <hr />
+                        <h4><?php _e('Change password'); ?></h4>
+                        <form  id="formUserChangePassword" name="formUserChangePassword" > 
+                            <div class="form-group">
+                                <label for="old_password"><?php _e('Old Password','tainacan'); ?><span style="color: #EE0000;"> *</span></label>
+                                <input type="password" required="required" class="form-control" name="old_password" id="old_password" placeholder="<?php _e('Type here the old password','tainacan'); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password"><?php _e('New Password','tainacan'); ?><span style="color: #EE0000;"> *</span></label>
+                                <input type="password" required="required" class="form-control" name="new_password" id="new_password" placeholder="<?php _e('Type here the new password','tainacan'); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="new_check_password"><?php _e('Confirm new password','tainacan'); ?><span style="color: #EE0000;"> *</span></label>
+                                <input type="password" required="required" class="form-control" name="new_check_password" id="new_check_password" placeholder="<?php _e('Type here your new password again','tainacan'); ?>">
+                            </div>
+                        </form> 
+                        <button type="submit" class="btn btn-primary" onclick="check_change_passwords(); return false;"><?php _e('Submit','tainacan'); ?></button>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close','tainacan'); ?></button>
-                    <button type="submit" class="btn btn-primary" onclick="check_change_passwords(); return false;"><?php _e('Submit','tainacan'); ?></button>
                 </div>
-            </form>    
         </div>
     </div>
 </div>

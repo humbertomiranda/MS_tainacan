@@ -36,8 +36,8 @@
 
     $(function () {
 
-        $('#open_myModalChangePassword').click(function (e) {
-            $('#myModalChangePassword').modal('show');
+        $('#open-modalEdit').click(function (e) {
+            $('#modalEdit').modal('show');
         });
 
         $('#formUserChangePassword').submit(function (e) {
@@ -53,7 +53,7 @@
                 showAlertGeneral(elem.title, elem.msg, elem.type);
 
                 if (elem.type == 'success') {
-                    $('#myModalChangePassword').modal('hide');
+                    $('#modalEdit').modal('hide');
                     setTimeout(function () {
                         showLoginScreen($("#src").val());
                     }, 2000);
@@ -65,13 +65,12 @@
 
     });
 
-    function check_change_passwords()
-    {
+    function check_change_passwords(){
         if ($('#new_password').val().trim() == '' || $('#new_check_password').val().trim() == '' || $('#old_password').val().trim() == '') {
             showAlertGeneral("Erro", "Preencha os campos corretamente.", "error");
             return false;
-        } else
-        {
+        } 
+        else {
             if ($('#new_password').val() === $('#new_check_password').val()) {
                 $('#formUserChangePassword').submit();
                 return true;
@@ -81,5 +80,9 @@
                 return false;
             }
         }
+    }
+
+    function check_change_names(){
+        
     }
 </script>

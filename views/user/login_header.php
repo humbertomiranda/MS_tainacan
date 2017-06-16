@@ -72,7 +72,6 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
                 <div class="col-md-5" style="border-bottom: 1px solid #e8e8e8"></div>
             </div>
         <?php endif; ?>
-
         <form action="" id="LoginForm" name="LoginForm" class="form-signin">
             <input type="hidden" id="operation_log" name="operation" value="login_regular">
             <input type="hidden" id="collection_id_login" name="collection_id" value="<?php echo $collection_id; ?>">
@@ -86,7 +85,6 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
             <button class="btn btn-lg btn-primary pull-right send-login" type="submit"><?php _e("Login",'tainacan'); ?></button>
             <br><label><a style="cursor: pointer;" id="open_myModalForgotPasswordHeader"><?php _e("Forgot password?",'tainacan'); ?></a></label>
         </form>
-
     </div>
 </div>
 
