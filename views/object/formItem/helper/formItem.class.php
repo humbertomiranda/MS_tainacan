@@ -44,8 +44,10 @@ class FormItem extends Model {
         'grey' => ['#58595B', '#231F20'],
     ];
     public $isRequired;
-    
-    function __construct($collection_id = 0) {
+    public $title;
+    public $value;
+
+    function __construct($collection_id = 0,$title = '',$value= false) {
         $this->collection_id = $collection_id;
         $this->terms_fixed = [
             'title' => get_term_by('slug', 'socialdb_property_fixed_title', 'socialdb_property_type'),
@@ -62,6 +64,8 @@ class FormItem extends Model {
         if ($this->collection_id !== 0):
             $this->get_labels_fixed_properties($this->collection_id);
         endif;
+        $this->title = ($title == '') ? __('Create new item - Write text', 'tainacan'):$title;
+        $this->value = $value;
     }
 
     /**
@@ -77,10 +81,6 @@ class FormItem extends Model {
         $this->structureProperties($ordenation, $tabs, $allTabs, $properties);
         if ((!$tabs || empty($tabs)) && !$default_tab && !$allTabs):
             ?>
-            <div class="expand-all-div"  onclick="open_accordeon('default')" >
-                <a class="expand-all-link" href="javascript:void(0)">
-                    <?php _e('Expand all', 'tainacan') ?>&nbsp;&nbsp;<span class="caret"></span></a>
-            </div>
             <hr>
              <div id="tab-content-metadata" class="tab-content" style="background: white;">
                 <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
@@ -93,6 +93,18 @@ class FormItem extends Model {
                         <?php $this->listPropertiesbyTab('default') ?>
                     </div>
                 </div>
+            </div>
+            <button type="button"
+                    onclick="back_main_list(<?php echo $object_id ?>);"
+                    style="margin-bottom: 20px;"
+                    class="btn btn-default btn-lg pull-left"><?php _e('Discard','tainacan'); ?>
+            </button>
+            <div id="submit_container">
+                <button type="button"
+                        id="submit-form-item"
+                        style="margin-bottom: 20px;"
+                        class="btn btn-success btn-lg pull-right send-button">
+                            <?php _e('Save','tainacan'); ?></button>
             </div>
             <?php
         else:
@@ -309,15 +321,19 @@ class FormItem extends Model {
                     $object = (isset($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
                     if (in_array($property['type'], $data) && !$object) {
                         $class = new FormItemText();
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if (in_array($property['type'], $term) && !$object) {
                         $class = new FormItemCategory();
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if ($object) {
                         $class = new FormItemObject($this->collection_id);
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if ($property['type'] == __('Compounds', 'tainacan')) {
                         $class = new FormItemCompound();
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     }
                 }
@@ -361,7 +377,7 @@ class FormItem extends Model {
     }
 
     /**
-     * 
+     *
      * @param type $param
      */
     public function propertyCategoryOrdenate($category_id,$properties) {
@@ -383,11 +399,11 @@ class FormItem extends Model {
         }
         return $original_properties;
     }
-    
+
     /**
-     * 
+     *
      * metodo para a lisaagem de metadados de categoria
-     * 
+     *
      * @param type $properties
      */
     public function propertyCategoryList($properties) {
@@ -420,15 +436,19 @@ class FormItem extends Model {
                     $object = (isset($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
                     if (in_array($property['type'], $data) && !$object) {
                         $class = new FormItemText();
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if (in_array($property['type'], $term) && !$object) {
                         $class = new FormItemCategory();
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if ($object) {
                         $class = new FormItemObject($this->collection_id);
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     } else if ($property['type'] == __('Compounds', 'tainacan')) {
                         $class = new FormItemCompound();
+                        $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
                     }
                 }
@@ -452,6 +472,19 @@ class FormItem extends Model {
         }
     }
 
+    public function getValues($array){
+       $ids = [];
+       if(is_array($array)){
+          $values = $array['values'];
+          foreach ($values as $key => $value) {
+            $meta = $this->sdb_get_post_meta($value);
+            if(isset($meta->meta_value))
+                $ids[] = $meta->meta_value;
+          }
+       }
+       return $ids;
+    }
+
     /**
      *
      * @param type $collection_id
@@ -470,14 +503,14 @@ class FormItem extends Model {
             endif;
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public function validateIcon($id,$text = '') {
         ?>
-            &nbsp;<span id="<?php echo $id ?>" class="pull-right validateIcon" style="color:red;font-size: 11px;display: none;"><?php echo $text ?>&nbsp;<span style="color:red;font-size: 13px;" class="glyphicon glyphicon-exclamation-sign pull-right"></span></span>    
-        <?php    
+            &nbsp;<span id="<?php echo $id ?>" class="pull-right validateIcon" style="color:red;font-size: 11px;display: none;"><?php echo $text ?>&nbsp;<span style="color:red;font-size: 13px;" class="glyphicon glyphicon-exclamation-sign pull-right"></span></span>
+        <?php
     }
 
     /**
@@ -524,8 +557,8 @@ class FormItem extends Model {
                 }
 
             });
-            
-            
+
+
             /* Verificando se o item pode ser publicado ou atualizado */
             $('#submit-form-item').click(function(){
                 var publish = true;
@@ -539,14 +572,14 @@ class FormItem extends Model {
                             var has_one = false;
                             //verifico se um dos composto esta preenchido
                             $('.compound-one-field-should-be-filled-'+compound_id).each(function(){
-                                // pego o id do atual que sera utilizado para buscar a aba 
+                                // pego o id do atual que sera utilizado para buscar a aba
                                 // caso nao seja encontrado nenhum composto preenchido
                                 var key = $(this).attr('id');
                                 if($(this).val()!=='false'){
                                     has_one = true
                                 }
                             });
-                            // se nenhum campo preenchido estiver mostro a 
+                            // se nenhum campo preenchido estiver mostro a
                             // mensagem do composto e da aba
                             if(!has_one){
                                 publish = false;
@@ -557,7 +590,7 @@ class FormItem extends Model {
                         }else{
                             //ja coloco falso pois eh um campo obrigatorio que nao foi preenchido
                             publish = false;
-                            // pego o id do atual que sera utilizado para buscar a aba 
+                            // pego o id do atual que sera utilizado para buscar a aba
                             // caso nao seja encontrado nenhum composto preenchido
                             var key = $(this).parent().attr('id');
                             console.log($(this).attr('property'),$(this).attr('compound'));
@@ -587,7 +620,7 @@ class FormItem extends Model {
                     updateItem();
                 }
             });
-            
+
             /**
              * funcao que procura qual aba pertence o id passad como parametro
              * @param {type} id
@@ -605,13 +638,14 @@ class FormItem extends Model {
                 }
                 return tab;
             }
-            
-            
+
+
             /**
              * funcao que publica o item
              * @returns {undefined}
              */
             function updateItem(){
+                show_modal_main();
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
@@ -620,13 +654,14 @@ class FormItem extends Model {
                         item_id:'<?php echo $this->itemId ?>',
                         collection_id:$('#collection_id').val()}
                 }).done(function (result) {
+                    hide_modal_main();
                     var json = JSON.parse(result)
                      showAlertGeneral(json.title,json.msg,json.type);
                      routerGo($('#slug_collection').val());
-                     
+                     showList($('#src').val());
                 });
             }
-            
+
             /**
              */
             function appendCategoryMetadata(categories, item_id, seletor) {
@@ -650,9 +685,9 @@ class FormItem extends Model {
                     }
                 });
             }
-            
+
             /**
-            * 
+            *
 
              * @param {type} val
              * @param {type} compound_id
