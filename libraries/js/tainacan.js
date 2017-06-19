@@ -2019,16 +2019,31 @@ function check_register_fields()
     if ($('#user_login').val().trim() == '' || $('#first_name').val().trim() == '' || $('#user_conf_pass').val().trim() == '' || $('#user_pass').val().trim() == '') {
         showAlertGeneral("Erro", "Preencha os campos corretamente.", "error");
         return false;
-    } else
-    {
-        if ($('#user_pass').val().trim() !== $('#user_conf_pass').val().trim()) {
+    }
+    else{
+        var user_pass = $('#user_pass').val().trim();
+        var user_conf_pass = $('#user_conf_pass').val().trim();
+        var regex = /(?=(?:.*?[A-Z]){1})(?=(?:.*?[0-9]){1})(?=(?:.*?[!@#$%*()_+^&}{:;?.]){1})/;
+        
+        if(user_pass.length < 8 && user_pass.length >= 26)
+        {
+            showAlertGeneral("Erro", "A senha deve conter no minímo 8 e máximo 25 dígitos!", "error");
+            return false;
+        }
+        else if(!regex.exec(user_pass))
+        {
+            showAlertGeneral("Erro", "A senha deve conter no mínimo 1 caractere em maiúsculo, 1 número e 1 caractere especial!", "error");
+            $( "#dica_senha" ).append( '<br><span style="color: #EE0000;">Senha não contem os caracteres necessários.</span>' );
+            return false;
+        }
+        else if(user_pass !== user_conf_pass) {
             showAlertGeneral("Erro", "Senhas nao conferem. Favor verificar!", "error");
             return false;
-        } else {
+        }  else {
             $('#formUserRegister').submit();
             return true;
         }
-    }
+    }  
 }
 
 function changeBoxWidth(formInput) {

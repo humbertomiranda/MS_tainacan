@@ -78,7 +78,8 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
                 </div>
                 <div class="form-group">
                     <label for="user_pass"><?php _e('Password', 'tainacan'); ?><span style="color: #EE0000;"> *</span></label>
-                    <input  type="password" required="required" class="form-control" name="user_pass" id="user_pass" placeholder="<?php _e('Type here your password', 'tainacan'); ?>">
+                    <p class="help-block" id="dica_senha">A senha deve conter no mínimo 8 caracteres sendo 1 caractere em maiúsculo, 1 número e 1 caractere especial!</p>
+                    <input  type="password" maxlength="25" required="required" class="form-control" name="user_pass" id="user_pass" placeholder="<?php _e('Type here your password', 'tainacan'); ?>">
                 </div>
                 <div class="form-group">
                     <label for="user_pass"><?php _e('Confirm Password', 'tainacan'); ?><span style="color: #EE0000;"> *</span></label>
