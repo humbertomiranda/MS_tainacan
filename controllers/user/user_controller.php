@@ -185,6 +185,9 @@ class UserController extends Controller {
             case "change_password":
                 return json_encode($user_model->reset_password($data));
                 break;
+            case "change_names":
+                return json_encode($user_model->reset_names($data));
+                break;
             case "register_user":
                 return $this->render(dirname(__FILE__) . '../../../views/user/register.php');
                 break;

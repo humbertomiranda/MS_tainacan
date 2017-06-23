@@ -63,6 +63,25 @@
 
         });
 
+        $('#formNames').submit(function (e) {  
+            e.preventDefault();
+            $.ajax({
+                url: $("#src").val() + '/controllers/user/user_controller.php',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false
+            }).done(function (response) { 
+                console.log(response); 
+                elemt = JSON.parse(response);
+                showAlertGeneral(elemt.title, elemt.msg, elemt.type);
+
+                if(elemt.type == 'success'){
+                    $('#modalEdit').modal('hide');
+                }
+            });
+        });
+
     });
 
     function check_change_passwords(){
@@ -83,6 +102,13 @@
     }
 
     function check_change_names(){
-        
+        if($("#new-first-name").val() != '' || $('#new-last-name').val() != '' || $('#new-email').val() != ''){
+            $('#formNames').submit();
+            return true;
+        }
+        else{
+            showAlertGeneral("Error", "Please, fill in at least one field", "error");
+            return false;
+        }
     }
 </script>

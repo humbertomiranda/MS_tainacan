@@ -79,30 +79,27 @@ $current_user_metas = get_user_meta($current_user->ID);
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            
-             
-                <input type="hidden" name="operation" value="change_password">
-                <input type="hidden" name="password_user_id" id="password_user_id" value="<?php echo $current_user->ID; ?>"/>
-                
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel"><?php _e('Edit profile!','tainacan'); ?></h4>
                 </div>
                 <div class="modal-body">
                     <div>
-                        <h4><?php _e('Change name and email'); ?></h4>
+                        <h4><?php _e('Change names and email'); ?></h4>
                         <form id="formNames">
+                            <input type="hidden" name="operation" value="change_names">
+                            <input type="hidden" name="id" id="id" value="<?php echo $current_user->ID; ?>"> 
                             <div class="form-group">
                                 <label for="new-first-name"><?php _e('First Name'); ?></span></label>
-                                <input class="form-control" type="text" name="" id="new-first-name" value="<?php echo $current_user_metas['first_name'][0]; ?>">
+                                <input class="form-control" type="text" name="new-first-name" id="new-first-name" placeholder="<?php echo $current_user_metas['first_name'][0]; ?>" value="">
                             </div>
                             <div class="form-group">
                                 <label for="new-last-name"><?php _e('Last Name'); ?></span></label>
-                                <input class="form-control" type="text" name="" id="new-last-name" value="<?php echo $current_user_metas['last_name'][0]; ?>">
+                                <input class="form-control" type="text" name="new-last-name" id="new-last-name" placeholder="<?php echo $current_user_metas['last_name'][0]; ?>" value="">
                             </div>
                             <div class="form-group">
                                 <label for="new-email"><?php _e('Email'); ?></label>
-                                <input class="form-control" type="" name="" id="new-email" value="<?php echo $current_user->user_email; ?>">
+                                <input class="form-control" type="email" name="new-email" id="new-email" placeholder="<?php echo $current_user->user_email; ?>" value="">
                             </div>
                         </form>
                         <button type="submit" class="btn btn-primary" onclick="check_change_names(); return false;"><?php _e('Submit','tainacan'); ?></button>
@@ -110,7 +107,9 @@ $current_user_metas = get_user_meta($current_user->ID);
                     <div>
                         <hr />
                         <h4><?php _e('Change password'); ?></h4>
-                        <form  id="formUserChangePassword" name="formUserChangePassword" > 
+                        <form  id="formUserChangePassword" name="formUserChangePassword" >
+                            <input type="hidden" name="operation" value="change_password">
+                            <input type="hidden" name="password_user_id" id="password_user_id" value="<?php echo $current_user->ID; ?>"/> 
                             <div class="form-group">
                                 <label for="old_password"><?php _e('Old Password','tainacan'); ?><span style="color: #EE0000;"> *</span></label>
                                 <input type="password" required="required" class="form-control" name="old_password" id="old_password" placeholder="<?php _e('Type here the old password','tainacan'); ?>">

@@ -485,6 +485,33 @@ class UserModel extends Model {
         return $result;
     }
 
+    public function reset_names($data){
+        $user = get_user_by( 'id', $data['id'] );
+        $user_meta = get_user_meta( $user->ID );
+        
+        if($data['new-first-name'] != ''){
+            $isUpdate = update_user_meta( $user->ID, 'first_name', $data['new-first-name']);
+        }
+        if($data['new-last-name'] != ''){
+            $isUpdate = update_user_meta( $user->ID, 'last_name', $data['new-last-name']);
+        }
+        if($data['new-email'] != ''){
+            $isUpdate = wp_update_user( array('ID' => $user->ID, 'user_email' => $data['new-email']) );
+        }
+
+        if ( $isUpdate) {
+            $result['title'] = __('Success', 'tainacan');
+            $result['msg'] = __('Changed successfully!', 'tainacan');
+            $result['type'] = "success";
+        } else {
+            $result['title'] = __('Error', 'tainacan');
+            $result['msg'] = __('Change error!', 'tainacan');
+            $result['type'] = "error";
+        }
+
+        return $result;		
+    }
+
     public function send_share_email($data) {
         $site_name = get_option('blogname');
         $link = get_the_permalink($data['collection_id']) . '?item=' . get_post($data['object_id'])->post_name;
