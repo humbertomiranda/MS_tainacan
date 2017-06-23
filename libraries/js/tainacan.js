@@ -2033,7 +2033,7 @@ function check_register_fields()
         else if(!regex.exec(user_pass))
         {
             showAlertGeneral("Erro", "A senha deve conter no mínimo 1 caractere em maiúsculo, 1 número e 1 caractere especial!", "error");
-            $( "#dica_senha" ).append( '<br><span style="color: #EE0000;">Senha não contem os caracteres necessários.</span>' );
+            document.getElementById("dica_senha").style.color = "#FF0000";
             return false;
         }
         else if(user_pass !== user_conf_pass) {
