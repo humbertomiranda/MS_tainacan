@@ -1724,8 +1724,7 @@ if (!function_exists("theme_styles")) {
                 'slick-theme' => '/libraries/css/slick/slick-theme.css',
                 'socialdbSweetAlert' => '/libraries/css/SweetAlert/sweet-alert.css',
                 'socialdbcss' => '/libraries/css/socialdb.css',
-                'tainacan' => '/libraries/css/tainacan.css',
-                'footer' => '/libraries/css/footer.css'
+                'tainacan' => '/libraries/css/tainacan.css'
             ];
             foreach ($home_css as $css_file => $css_path) {
                 add_tainacan_css($css_file, $css_path);
@@ -1754,8 +1753,7 @@ if (!function_exists("theme_styles")) {
                 'jqcloudcss' => '/libraries/css/jqcloud/jqcloud.css',
                 'toastr' => '/libraries/js/toastr/toastr.css',
                 'croppic' => '/libraries/css/croppic/croppic.css',
-                'tainacan' => '/libraries/css/tainacan.css',
-                'footer' => '/libraries/css/footer.css'
+                'tainacan' => '/libraries/css/tainacan.css'
             ];
             $column = get_post_meta(get_the_ID(), 'socialdb_collection_submission_visualization',true);
             if($column&&$column=='one'){

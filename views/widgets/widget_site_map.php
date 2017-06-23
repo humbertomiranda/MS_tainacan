@@ -47,8 +47,8 @@ class site_map extends WP_Widget {
 
         // This is where you run the code and display the output
         if($home){
-            echo '<div class="col-md-12">
-                    <div style="padding-left: 0px;" class="col-md-6">
+            echo '<div class="col-md-12 leftt">
+                    <div class="col-md-6 leftt">
                         <li><a class="" href="'. $home .'">'. __('Inicio') .'</a></li>';
             if(is_user_logged_in()) {
                 $local = get_template_directory_uri();
@@ -73,7 +73,7 @@ class site_map extends WP_Widget {
                 }
             }
             echo '</div>
-                    <div style="padding-left: 0px;" class="col-md-6">
+                    <div class="col-md-6 leftt">
                         <li><a class="" onclick="redirectAdvancedSearch(false)" href="javascript:void(0)">'. __('Coleções e busca').'</a></li>
                         <li><a target="_blank" href="'. $handbook .'">'. __('Manual') .'</a></li>
                     ';
